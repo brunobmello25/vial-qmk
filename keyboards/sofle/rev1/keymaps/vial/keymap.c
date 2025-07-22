@@ -19,6 +19,9 @@
 // clang-format off
 
 #include QMK_KEYBOARD_H
+#include <quantum.h>
+
+#define GAMING_LED_PIN B0
 
 // Default keymap. This can be changed in Vial. Use oled.c to change beavior that Vial cannot change.
 
@@ -158,3 +161,19 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [4] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS), ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
 };
 
+
+// runs once at power-up
+void matrix_init_user(void) {
+  setPinOutput(GAMING_LED_PIN);
+  writePinHigh(GAMING_LED_PIN); // turn off gaming LED
+}
+
+// runs every time layers change
+layer_state_t layer_state_set_user(layer_state_t state) {
+  if (layer_state_cmp(state, _GAMING)) {
+    writePinLow(GAMING_LED_PIN);
+  } else {
+    writePinHigh(GAMING_LED_PIN);
+  }
+  return state;
+}
