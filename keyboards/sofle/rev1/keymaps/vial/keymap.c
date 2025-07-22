@@ -168,9 +168,20 @@ void matrix_init_user(void) {
   writePinHigh(GAMING_LED_PIN); // turn off gaming LED
 }
 
+// runs every time default layer changes
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+  if (layer_state_cmp(state, _GAMING) && is_keyboard_left()) {
+    writePinLow(GAMING_LED_PIN);
+  } else {
+    writePinHigh(GAMING_LED_PIN);
+  }
+  return state;
+}
+
 // runs every time layers change
 layer_state_t layer_state_set_user(layer_state_t state) {
-  if (layer_state_cmp(state, _GAMING)) {
+  // Check if gaming is the default layer and update LED accordingly
+  if (layer_state_cmp(default_layer_state, _GAMING) && is_keyboard_left()) {
     writePinLow(GAMING_LED_PIN);
   } else {
     writePinHigh(GAMING_LED_PIN);
