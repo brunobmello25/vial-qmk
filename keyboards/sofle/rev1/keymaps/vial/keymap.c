@@ -162,13 +162,11 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 };
 
 
-// runs once at power-up
 void matrix_init_user(void) {
   setPinOutput(GAMING_LED_PIN);
-  writePinHigh(GAMING_LED_PIN); // turn off gaming LED
+  writePinHigh(GAMING_LED_PIN);
 }
 
-// runs every time default layer changes
 layer_state_t default_layer_state_set_user(layer_state_t state) {
   if (layer_state_cmp(state, _GAMING) && is_keyboard_left()) {
     writePinLow(GAMING_LED_PIN);
@@ -178,9 +176,7 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
   return state;
 }
 
-// runs every time layers change
 layer_state_t layer_state_set_user(layer_state_t state) {
-  // Check if gaming is the default layer and update LED accordingly
   if (layer_state_cmp(default_layer_state, _GAMING) && is_keyboard_left()) {
     writePinLow(GAMING_LED_PIN);
   } else {
